@@ -1,0 +1,60 @@
+# {{ ansible_managed }}
+
+# Note: this config doesn't contain the genesis block.
+
+[Eth]
+SyncMode = "fast"
+LightPeers = 100
+DatabaseCache = {{ geth_cache }}
+GasPrice = 18000000000
+EnablePreimageRecording = false
+
+[Eth.Ethash]
+CacheDir = "ethash"
+CachesInMem = 2
+CachesOnDisk = 3
+DatasetDir = "{{ geth_data_dir }}/ethash"
+DatasetsInMem = 1
+DatasetsOnDisk = 2
+PowMode = 0
+
+[Eth.TxPool]
+NoLocals = false
+Journal = "transactions.rlp"
+Rejournal = 3600000000000
+PriceLimit = 1
+PriceBump = 10
+AccountSlots = 16
+GlobalSlots = 4096
+AccountQueue = 64
+GlobalQueue = 1024
+Lifetime = 10800000000000
+
+[Eth.GPO]
+Blocks = 20
+Percentile = 60
+
+[Shh]
+MaxMessageSize = 1048576
+MinimumAcceptedPOW = 2e-01
+
+[Node]
+DataDir = "{{ geth_data_dir }}"
+IPCPath = "geth.ipc"
+HTTPHost = "{{ geth_rpcaddr }}"
+HTTPPort = {{ geth_rpcport }}
+HTTPCors = [{{ geth_rpccorsdomain }}]
+HTTPVirtualHosts = [{{ geth_rpcvhosts  }}]
+HTTPModules = [{{ geth_rpcapi  }}]
+WSHost = "{{ geth_wsaddr }}"
+WSPort = {{ geth_wsport }}
+WSOrigins = [{{ geth_wscorsdomain  }}]
+WSModules = [{{ geth_wsapi  }}]
+
+[Node.P2P]
+MaxPeers = {{ geth_maxpeers }}
+NoDiscovery = false
+StaticNodes = []
+TrustedNodes = []
+ListenAddr = ":30303"
+EnableMsgEvents = false

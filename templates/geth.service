@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 [Unit]
 Description=go-thereum client
 Requires=network.target
@@ -6,7 +8,6 @@ Requires=network.target
 Type=simple
 User={{ geth_user }} 
 Restart=on-failure
-ExecStart=/home/{{ geth_user }}/.local/bin/geth --datadir "{{ geth_datadir }}" --cache {{ geth_cache }} --syncmode "fast"{% if geth_testnet %} --testnet{% endif %}{% if geth_port is defined %} --port {{ geth_port }}{% endif %} --maxpeers {{ geth_maxpeers }} --maxpendpeers {{ geth_maxpendpeers }} {% if geth_rpc is defined and geth_rpc == true %} --rpc --rpcaddr {{ geth_rpcaddr }} --rpcport {{ geth_rpcport }} --rpcapi {{ geth_rpcapi }}{% if geth_rpccorsdomain is defined %} --rpccorsdomain "{{ geth_rpccorsdomain }}"{% endif %}{% if geth_rpcvhosts %} --rpcvhosts "{{ geth_rpcvhosts }}"{% endif %}{% endif %} 
-
+ExecStart=/var/lib/geth/.local/bin/geth --config /etc/geth/geth.toml {% if geth_testnet %}--testnet{% endif %} --password /etc/geth/passwords.txt --unlock {{geth_account}} --keystore {{geth_keys_dir}}
 [Install]
 WantedBy=default.target
